@@ -5,6 +5,8 @@ namespace app\modules\healthJournalEntry\models;
 use Yii;
 use yii\db\ActiveRecord;
 use app\modules\user\models\User;
+use yii\web\HttpException;
+
 /**
  * This is the model class for table "HealthJournalEntry".
  *
@@ -19,6 +21,15 @@ use app\modules\user\models\User;
  */
 class HealthJournalEntry extends ActiveRecord
 {
+    public function beforeSave($insert)
+    {
+        if($insert && !Yii::$app->user) {
+            throw new HttpException(404, 'Остутствует текущий пользователь');
+        }
+        $this->user_id = Yii::$app->user->id;
+        return parent::beforeSave($insert);
+    }
+
     /**
      * {@inheritdoc}
      */

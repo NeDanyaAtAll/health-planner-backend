@@ -13,6 +13,13 @@ class User extends ActiveRecord implements IdentityInterface
         return 'User';
     }
 
+    public function fields()
+    {
+        $fields = parent::fields();
+        unset($fields['hashed_password'], $fields['date_of_birth']);
+        return $fields;
+    }
+
     public function validatePassword($password)
     {
         if(!Yii::$app->security->validatePassword($password, $this->hashed_password)) {
@@ -40,7 +47,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return;
+        return null;
     }
 
     /**
@@ -56,7 +63,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getAuthKey()
     {
-        return;
+        return null;
     }
 
     /**
@@ -65,6 +72,6 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        return;
+        return null;
     }
 }
