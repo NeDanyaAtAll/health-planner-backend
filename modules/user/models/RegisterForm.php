@@ -9,16 +9,12 @@ class RegisterForm extends Model
     private $email;
     private $name;
     private $password;
-    private $date_of_birth;
-    private $preferences; 
     
-    public function __construct(string $email, string $name, string $password, ?string $date_of_birth, ?string $preferences)
+    public function __construct(string $email, string $name, string $password)
     {
         $this->email = $email;
         $this->name = $name;
         $this->password = $password;
-        $this->date_of_birth = $date_of_birth;
-        $this->preferences = $preferences;
     }
 
     public function getEmail(): string
@@ -49,26 +45,6 @@ class RegisterForm extends Model
     public function setPassword(string $password): void
     {
         $this->password = $password;
-    }
-
-    public function getDateOfBirth(): ?string
-    {
-        return $this->date_of_birth;
-    }
-
-    public function setDateOfBirth(string $date_of_birth): void
-    {
-        $this->date_of_birth = $date_of_birth;
-    }
-
-    public function getPreferences(): ?string
-    {
-        return $this->preferences;
-    }
-
-    public function setPreferences(string $preferences): void
-    {
-        $this->preferences = $preferences;
     }
 
     public function rules()

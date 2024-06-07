@@ -67,8 +67,8 @@ class AuthController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $request = Yii::$app->request->post();
-
-        $loginForm = new LoginForm($request['login'], $request['password']);
+        
+        $loginForm = new LoginForm($request['email'], $request['password']);
 
         if($loginForm->validate()) {
             $userRepo = new UserRepo();
@@ -100,13 +100,11 @@ class AuthController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $request = Yii::$app->request->post();
-
+        
         $registerForm = new RegisterForm(
             $request['email'], 
             $request['name'], 
-            $request['password'], 
-            $request['date_of_birth'], 
-            $request['preferences']
+            $request['password']
         );
 
         if($registerForm->validate())
@@ -114,9 +112,9 @@ class AuthController extends Controller
             $user = new User();
             $user->email = $registerForm->email;
             $user->name = $registerForm->name;
-            $user->date_of_birth = date('Y-m-d', strtotime($registerForm->date_of_birth));
-            $user->hashed_password = Yii::$app->getSecurity()->generatePasswordHash($registerForm->password);
-            $user->preferences = $registerForm->preferences;
+            $user->date_of_birth = date('Y-m-d');
+            $user->hashed_password = Yii::$app->getSecurity()->generatePasswordHash($registerForm['password']);
+            $user->preferences = json_encode('');
             return $user->toArray();
         }
 
