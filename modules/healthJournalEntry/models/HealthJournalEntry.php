@@ -44,8 +44,8 @@ class HealthJournalEntry extends ActiveRecord
             'entry_id',
             'user_id',
             'entry_date',
-            'symptomps',
-            'condition+description',
+            'symptoms',
+            'condition_description',
             'other_notes',
         ];
     }
@@ -56,11 +56,8 @@ class HealthJournalEntry extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'default', 'value' => null],
-            [['user_id'], 'integer'],
             [['entry_date'], 'safe'],
             [['symptoms', 'condition_description', 'other_notes'], 'string'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'user_id']],
         ];
     }
 
