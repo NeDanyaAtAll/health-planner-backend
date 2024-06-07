@@ -2,15 +2,14 @@
 
 namespace app\controllers\auth;
 
-use yii\web\Controller;
 use Yii;
+use yii\web\Controller;
 use app\modules\user\models\User;
 use app\modules\user\models\RegisterForm;
 use yii\filters\AccessControl;
 
 use app\modules\user\repos\UserRepo;
 use app\modules\user\models\LoginForm;
-use app\modules\user\services\AuthService;
 use yii\filters\Cors;
 
 class AuthController extends Controller
@@ -53,7 +52,7 @@ class AuthController extends Controller
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $currentUser = Yii::$app->user->identity;
-        if(!$currentUser) {
+        if (!$currentUser) {
             Yii::$app->response->statusCode = 404;
             return [
                 'errorMessage' => 'Пользователь не найден'
@@ -68,6 +67,7 @@ class AuthController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $request = Yii::$app->request->post();
+
         $loginForm = new LoginForm($request['login'], $request['password']);
 
         if($loginForm->validate()) {
@@ -87,7 +87,8 @@ class AuthController extends Controller
             }
 
             Yii::$app->user->login($user, 0);
-            return Yii::$app->response->statusCode = 200;
+            Yii::$app->response->statusCode = 200;
+            return $user->toArray();
         }
 
         Yii::$app->response->statusCode = 422;
@@ -108,27 +109,14 @@ class AuthController extends Controller
             $request['preferences']
         );
 
-        $authService = new AuthService();
-        $userRepo = new UserRepo();
-
         if($registerForm->validate())
         {
-            $isEmailExists = $authService->checkUniqueEmail($userRepo, $registerForm->email);
-
-            if($isEmailExists) {
-                Yii::$app->response->statusCode = 422;
-                return [
-                    'error' => 'Пользователь с таким email уже существует'
-                ];
-            }
-
             $user = new User();
             $user->email = $registerForm->email;
             $user->name = $registerForm->name;
             $user->date_of_birth = date('Y-m-d', strtotime($registerForm->date_of_birth));
             $user->hashed_password = Yii::$app->getSecurity()->generatePasswordHash($registerForm->password);
             $user->preferences = $registerForm->preferences;
-            $user->save();
             return $user->toArray();
         }
 
