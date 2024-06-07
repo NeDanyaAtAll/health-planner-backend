@@ -62,7 +62,8 @@ $config = [
                     'class' => 'yii\rest\UrlRule', 
                     'controller' => [
                         'user' => 'user/user',
-                        'reminder' => 'reminder/reminder'
+                        'reminder' => 'reminder/reminder',
+                        'health-journal-entry' => 'healthJournalEntry/entry'
                     ] 
                 ],
             ],
